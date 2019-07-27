@@ -7,18 +7,6 @@ int32_t x=0, y=0;
 
 void ticks1(int8_t n) {
   n = sign(n);
-  if(n == -1)
-  {
-    ledRed(1);
-    ledYellow(0);
-    ledGreen(0);
-  }
-  else
-  {
-    ledRed(1);
-    ledYellow(1);
-    ledGreen(0);
-  }
   
   int16_t dc = + divide(n*s - n*c/2/STEPS_PER_RADIAN, STEPS_PER_RADIAN);
   int16_t ds = - divide(n*c + n*s/2/STEPS_PER_RADIAN, STEPS_PER_RADIAN);
