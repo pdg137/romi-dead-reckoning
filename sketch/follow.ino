@@ -52,11 +52,8 @@ void followLine()
   static int16_t last_pos;
   int16_t s = pos/30 - (pos - last_pos)/5;
   last_pos = pos;
-  if(onLine())
-    if(s > 0)
-      motors.setSpeeds(100, 100-s);
-    else
-      motors.setSpeeds(100+s, 100);
+  if(s > 0)
+    motors.setSpeeds(100, 100-s);
   else
-    motors.setSpeeds(0,0);
+    motors.setSpeeds(100+s, 100);
 }

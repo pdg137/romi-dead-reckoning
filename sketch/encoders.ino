@@ -1,5 +1,5 @@
 const int16_t ANGLE_SCALE=20000;
-const int16_t STEPS_PER_RADIAN=870;
+const int16_t STEPS_PER_RADIAN=1000;
 int16_t c=ANGLE_SCALE;
 int16_t s=0;
 int32_t x=0, y=0;
