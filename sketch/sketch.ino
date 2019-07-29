@@ -13,8 +13,10 @@ extern int16_t s;
 extern int32_t x;
 extern int32_t y;
 extern int32_t target_s;
+uint16_t start_millis = 0;
 uint16_t last_on_line_millis = 0;
 uint16_t on_line_start_millis = 0;
+uint8_t state = 10;
 
 void setup()
 {
@@ -22,7 +24,7 @@ void setup()
   lcd.print("Dead");
   lcd.gotoXY(0,1);
   lcd.print("Reckon");
-  buzzer.play("v4l32>c>f"); 
+  buzzer.play("l32>c>f"); 
   delay(1000);
   uint16_t v = readBatteryMillivolts();
   lcd.clear();
@@ -33,15 +35,68 @@ void setup()
   delay(1000);
 
   digitalWrite(12, HIGH);
+  start_millis = millis();
+}
+
+void testCircle()
+{
+  int i=0;
+  motors.setSpeeds(50,100);
+  while(1)
+  {
+    encoderService();
+    switch(i)
+    {
+    case 0:
+      if(c < 0) i++;
+      break;
+    case 1:
+      if(s < 0) i++;
+      break;
+    case 2:
+      if(c > 0) i++;
+      break;
+    case 3:
+      if(s > 0)
+      {
+        motors.setSpeeds(0,0);
+        while(1);
+      }
+    }
+    debug();
+  }
+}
+
+void debug()
+{
+  static uint16_t i = 0;
+  i++;
+  if(i == 1000)
+  {
+    lcd.clear();
+    lcd.gotoXY(0,0);
+    lcd.print(s/200);
+    
+    lcd.gotoXY(4,0);
+    lcd.print(state);
+
+    lcd.gotoXY(0,1);
+    lcd.print(x/1000000L);
+    
+    lcd.gotoXY(4,1);
+    lcd.print(x > -1500000L); //y/1000000L);
+    
+    i = 0;
+  }
 }
 
 void loop()
 {
   static uint16_t i;
-  static uint8_t state = 0;
   encoderService();
-  followLine();
 
+if(state == 2)
+  ledYellow(1);
   switch(state) {
   case 0: // drive straight to line    
     readSensors();
@@ -63,33 +118,33 @@ void loop()
     }
     break;
   case 2: // homing
+    ledRed(1);
     goHome();
-    if(x > -1500000)
+    if(x > -1500000L)
     {
       state++;
     }
     break;
   case 3: // done
     motors.setSpeeds(0,0);
+    break;    
+  case 10:
+    uint16_t elapsed_time = millis() - start_millis;
+    uint8_t index = elapsed_time/1000;
+    int8_t turns[] = {100, 100, -100, 100, 100, -100, -100};
+    
+    if(index > sizeof(turns))
+    {
+      buzzer.play("o6l32grgrgrg2");
+      transform();
+      state = 2;
+    }
+    else
+    {
+      motors.setSpeeds(max(100+turns[index],100),max(100-turns[index],100));
+    }
     break;
   }
   
-  i++;
-  if(i == 100)
-  {
-    lcd.clear();
-    lcd.gotoXY(0,0);
-    lcd.print(s/200);
-    
-    lcd.gotoXY(4,0);
-    lcd.print(c/200);
-
-    lcd.gotoXY(0,1);
-    lcd.print(x/10000L);
-    
-    lcd.gotoXY(4,1);
-    lcd.print(y/10000L);
-    
-    i = 0;
-  }
+  debug();
 }
