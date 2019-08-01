@@ -1,4 +1,5 @@
 #include <Romi32U4.h>
+#include <EEPROM.h>
 
 Romi32U4LCD lcd;
 Romi32U4Buzzer buzzer;
@@ -20,6 +21,11 @@ uint8_t state = 0;
 
 void setup()
 {
+  digitalWrite(12, HIGH);
+  if(buttonA.isPressed())
+    calibrate();
+  loadCalibration();
+  
   lcd.clear();
   lcd.print("Dead");
   lcd.gotoXY(0,1);
@@ -33,8 +39,13 @@ void setup()
   lcd.print(v);
   lcd.print(" mV");
   delay(1000);
-
-  digitalWrite(12, HIGH);
+  
+  sensorDebug2();
+  lcd.clear();
+  lcd.print("Ready...");
+  buzzer.play("l32>f"); 
+  delay(1000);
+  buzzer.play(">>c"); 
   start_millis = millis();
 }
 
@@ -127,7 +138,7 @@ if(state == 2)
     break;
   case 3: // done
     motors.setSpeeds(0,0);
-    break;    
+    break;
   case 10:
     uint16_t elapsed_time = millis() - start_millis;
     uint8_t index = elapsed_time/2000;
