@@ -91,7 +91,7 @@ int16_t readLine()
   }
   else
   {
-    pos = (-2*(int32_t)sensor[0]-sensor[1]+sensor[2]+2*sensor[3])*1024/(sensor[0]+sensor[1]+sensor[2]+sensor[3]);
+    pos = -2*sensor[0]-sensor[1]+sensor[2]+2*sensor[3];
     if(pos < -2000)
       pos = -2000;
     if(pos > 2000)
@@ -100,14 +100,17 @@ int16_t readLine()
   return pos;
 }
 
+int16_t err;
 void followLine()
 {
   int16_t pos = readLine();
   static int16_t last_pos;
-  int16_t s = pos/30 - (pos - last_pos)/5;
+  err = pos/20 - (pos - last_pos)/5;
   last_pos = pos;
-  if(s > 0)
-    motors.setSpeeds(100, 100-s);
+  uint8_t speed = 100;
+  err = max(min(err,speed),-speed);
+  if(err > 0)
+    motors.setSpeeds(speed, speed-err);
   else
-    motors.setSpeeds(100+s, 100);
+    motors.setSpeeds(speed+err, speed);
 }

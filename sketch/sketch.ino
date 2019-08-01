@@ -36,8 +36,6 @@ void setup()
 
   digitalWrite(12, HIGH);
   start_millis = millis();
-
-  sensorDebug3();
 }
 
 void testCircle()
@@ -86,7 +84,7 @@ void debug()
     lcd.print(x/1000000L);
     
     lcd.gotoXY(4,1);
-    lcd.print(x > -1500000L); //y/1000000L);
+    lcd.print(y/1000000L);
     
     i = 0;
   }
@@ -113,7 +111,7 @@ if(state == 2)
     followLine();
     if(onLine())
       last_on_line_millis = millis();
-    if(millis() - on_line_start_millis > 1000 && millis() - last_on_line_millis > 1000) // change 1st # to 5000 later
+    if(millis() - on_line_start_millis > 1000 && millis() - last_on_line_millis > 500) // change 1st # to 5000 later
     {
       transform();
       state++;
@@ -132,8 +130,8 @@ if(state == 2)
     break;    
   case 10:
     uint16_t elapsed_time = millis() - start_millis;
-    uint8_t index = elapsed_time/1000;
-    int8_t turns[] = {100, 100, -100, 100, 100, -100, -100};
+    uint8_t index = elapsed_time/2000;
+    int8_t turns[] = {50, 50, -50, 50, 50, -50, -50, 50, 50, 50, -50, -50, 50, -50, -50};
     
     if(index > sizeof(turns))
     {
