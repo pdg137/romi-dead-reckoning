@@ -23,6 +23,60 @@ void readSensors()
   sensor[3] = calibratedRead(0,760,900);
 }
 
+void sensorDebug()
+{
+  lcd.clear();
+  lcd.print("Debug");
+  delay(500);
+  while(1)
+  {
+    lcd.clear();
+    lcd.print(analogRead(4));
+    lcd.gotoXY(4,0);
+    lcd.print(analogRead(3));
+    lcd.gotoXY(0,1);
+    lcd.print(analogRead(2));
+    lcd.gotoXY(4,1);
+    lcd.print(analogRead(0));
+    delay(100);
+  }
+}
+
+void sensorDebug2()
+{
+  lcd.clear();
+  lcd.print("Debug");
+  delay(500);
+  while(1)
+  {
+    readSensors();
+    lcd.clear();
+    lcd.print(sensor[0]);
+    lcd.gotoXY(4,0);
+    lcd.print(sensor[1]);
+    lcd.gotoXY(0,1);
+    lcd.print(sensor[2]);
+    lcd.gotoXY(4,1);
+    lcd.print(sensor[3]);
+    delay(100);
+  }
+}
+
+
+void sensorDebug3()
+{
+  lcd.clear();
+  lcd.print("Debug");
+  delay(500);
+  while(1)
+  {
+    int16_t pos = readLine();
+    lcd.clear();
+    lcd.print(pos);
+    delay(100);
+  }
+}
+
 int16_t readLine()
 {
   readSensors();
@@ -37,7 +91,7 @@ int16_t readLine()
   }
   else
   {
-    pos = -2*sensor[0]-sensor[1]+sensor[2]+2*sensor[3];
+    pos = (-2*(int32_t)sensor[0]-sensor[1]+sensor[2]+2*sensor[3])*1024/(sensor[0]+sensor[1]+sensor[2]+sensor[3]);
     if(pos < -2000)
       pos = -2000;
     if(pos > 2000)

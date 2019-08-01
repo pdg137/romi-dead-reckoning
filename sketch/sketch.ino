@@ -16,7 +16,7 @@ extern int32_t target_s;
 uint16_t start_millis = 0;
 uint16_t last_on_line_millis = 0;
 uint16_t on_line_start_millis = 0;
-uint8_t state = 10;
+uint8_t state = 0;
 
 void setup()
 {
@@ -36,6 +36,8 @@ void setup()
 
   digitalWrite(12, HIGH);
   start_millis = millis();
+
+  sensorDebug3();
 }
 
 void testCircle()
