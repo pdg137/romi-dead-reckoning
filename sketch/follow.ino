@@ -228,10 +228,14 @@ void followLine()
 {
   int16_t pos = readLine();
   static int16_t last_pos;
-  err = pos/20 - (pos - last_pos)/5;
+  static int16_t integral;
+  err = integral/30 + pos/15 + 2*(pos - last_pos);
   last_pos = pos;
-  uint8_t speed = 100;
+  integral += pos/50;
+  integral = max(min(integral,2000),-2000);
+  int16_t speed = 200;
   err = max(min(err,speed),-speed);
+  //motors.setSpeeds(err,-err); return;
   if(err > 0)
     motors.setSpeeds(speed, speed-err);
   else

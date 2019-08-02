@@ -1,7 +1,7 @@
 const uint32_t RADIUS=1931*10000L;
 const int32_t FOLLOW_MAX_Y=13000000L;
 const int16_t FOLLOW_MAX_S=15000L;
-const uint8_t MAX_SPEED=100;
+const uint8_t MAX_SPEED=200;
 
 int32_t target_s;
 
