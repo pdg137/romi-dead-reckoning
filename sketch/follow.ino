@@ -229,7 +229,7 @@ void followLine()
   int16_t pos = readLine();
   static int16_t last_pos;
   static int16_t integral;
-  err = integral/30 + pos/15 + 2*(pos - last_pos);
+  err = integral/20 + pos/22 + 2*(pos - last_pos);
   last_pos = pos;
   integral += pos/50;
   integral = max(min(integral,2000),-2000);
