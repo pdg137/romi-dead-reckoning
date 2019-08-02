@@ -122,7 +122,7 @@ if(state == 2)
     followLine();
     if(onLine())
       last_on_line_millis = millis();
-    if(millis() - on_line_start_millis > 1000 && millis() - last_on_line_millis > 500) // change 1st # to 5000 later
+    if(millis() - on_line_start_millis > 5000 && millis() - last_on_line_millis > 500)
     {
       transform();
       state++;
