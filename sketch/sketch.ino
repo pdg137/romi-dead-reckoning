@@ -116,7 +116,7 @@ if(state == 2)
       state++;
       on_line_start_millis = millis();
     }
-    motors.setSpeeds(100,100);
+    motors.setSpeeds(200,190);
     break;
   case 1: // follow line
     followLine();
